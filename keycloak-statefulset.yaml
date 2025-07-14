@@ -57,6 +57,9 @@ spec:
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" # Cần thiết khi chạy sau Ingress
 
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+
             - name: KEYCLOAK_ADMIN
               valueFrom:
                 {
