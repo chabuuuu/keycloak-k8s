@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: keycloak
+  labels:
+    app: keycloak
+spec:
+  replicas: 2 # Chạy 2 bản sao, mỗi bản sao sẽ được lên lịch trên 1 worker node
+  selector:
+    matchLabels:
+      app: keycloak
+  serviceName: "keycloak-headless"
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      affinity:
+        podAntiAffinity:
+          # Ưu tiên không xếp 2 pod trên cùng 1 node
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - keycloak
+                topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: keycloak
+          image: quay.io/keycloak/keycloak:24.0 # Luôn dùng phiên bản cụ thể cho production
+          args: ["start"]
+          env:
+            - name: KC_DB
+              value: "postgres"
+            - name: KC_DB_URL_HOST
+              valueFrom:
+                { secretKeyRef: { name: keycloak-secret, key: DB_HOST } }
+            - name: KC_DB_URL_DATABASE
+              valueFrom:
+                { secretKeyRef: { name: keycloak-secret, key: DB_DATABASE } }
+            - name: KC_DB_USERNAME
+              valueFrom:
+                { secretKeyRef: { name: keycloak-secret, key: DB_USERNAME } }
+            - name: KC_DB_PASSWORD
+              valueFrom:
+                { secretKeyRef: { name: keycloak-secret, key: DB_PASSWORD } }
+            - name: KC_HTTP_ENABLED
+              value: "true"
+            - name: KC_HOSTNAME
+              value: "keycloak.lab.test" # Thay bằng tên miền của bạn
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true" # Cần thiết khi chạy sau Ingress
+            - name: KEYCLOAK_ADMIN
+              valueFrom:
+                {
+                  secretKeyRef:
+                    { name: keycloak-secret, key: KEYCLOAK_ADMIN_USERNAME },
+                }
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              valueFrom:
+                {
+                  secretKeyRef:
+                    { name: keycloak-secret, key: KEYCLOAK_ADMIN_PASSWORD },
+                }
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 1

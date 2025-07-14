@@ -1,0 +1,32 @@
+# Service thông thường để cân bằng tải
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-service
+  labels:
+    app: keycloak
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: keycloak
+  type: ClusterIP # Chỉ có thể truy cập bên trong cụm
+
+---
+# Service không đầu (Headless) cho StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-headless
+  labels:
+    app: keycloak
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  clusterIP: None # Quan trọng: Đánh dấu đây là Headless Service
+  selector:
+    app: keycloak
