@@ -35,36 +35,42 @@ spec:
           env:
             - name: KC_DB
               value: "postgres"
-            - name: KC_DB_URL_HOST
+
+            - name: KC_DB_URL
               valueFrom:
-                { secretKeyRef: { name: keycloak-secret, key: DB_HOST } }
-            - name: KC_DB_URL_DATABASE
-              valueFrom:
-                { secretKeyRef: { name: keycloak-secret, key: DB_DATABASE } }
+                { secretKeyRef: { name: keycloak-secret, key: DB_URL } }
+
             - name: KC_DB_USERNAME
               valueFrom:
                 { secretKeyRef: { name: keycloak-secret, key: DB_USERNAME } }
+
             - name: KC_DB_PASSWORD
               valueFrom:
                 { secretKeyRef: { name: keycloak-secret, key: DB_PASSWORD } }
+
             - name: KC_HTTP_ENABLED
               value: "true"
+
             - name: KC_HOSTNAME
               value: "keycloak.lab.test" # Thay bằng tên miền của bạn
+
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" # Cần thiết khi chạy sau Ingress
+
             - name: KEYCLOAK_ADMIN
               valueFrom:
                 {
                   secretKeyRef:
                     { name: keycloak-secret, key: KEYCLOAK_ADMIN_USERNAME },
                 }
+
             - name: KEYCLOAK_ADMIN_PASSWORD
               valueFrom:
                 {
                   secretKeyRef:
                     { name: keycloak-secret, key: KEYCLOAK_ADMIN_PASSWORD },
                 }
+
           ports:
             - name: http
               containerPort: 8080
