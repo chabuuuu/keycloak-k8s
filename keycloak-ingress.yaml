@@ -5,6 +5,7 @@ metadata:
   annotations:
     # Các annotations có thể khác nhau tùy thuộc vào Ingress Controller bạn dùng
     nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "128k"
 spec:
   ingressClassName: nginx
   rules:
