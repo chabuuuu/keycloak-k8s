@@ -52,10 +52,10 @@ spec:
               value: "true"
 
             - name: KC_HOSTNAME_URL
-              value: "http://192.168.122.22:30080"
+              value: http://192.168.122.22:31617"
 
             - name: KC_HOSTNAME_ADMIN_URL
-              value: "http://192.168.122.22:30080"
+              value: http://192.168.122.22:31617"
 
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" # Cần thiết khi chạy sau Ingress
