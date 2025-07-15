@@ -51,8 +51,11 @@ spec:
             - name: KC_HTTP_ENABLED
               value: "true"
 
-            - name: KC_HOSTNAME
-              value: "keycloak.lab.test" # Thay bằng tên miền của bạn
+            - name: KC_HOSTNAME_URL
+              value: "http://192.168.122.22:30080" # Thay bằng tên miền của bạn
+
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: "http://192.168.122.22:30080"
 
             - name: PROXY_ADDRESS_FORWARDING
               value: "true" # Cần thiết khi chạy sau Ingress
