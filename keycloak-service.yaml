@@ -10,9 +10,10 @@ spec:
     - name: http
       port: 8080
       targetPort: 8080
+      nodePort: 30080
   selector:
     app: keycloak
-  type: ClusterIP # Chỉ có thể truy cập bên trong cụm
+  type: NodePort
 
 ---
 # Service không đầu (Headless) cho StatefulSet
