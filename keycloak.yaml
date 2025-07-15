@@ -7,8 +7,8 @@ metadata:
 spec:
   ports:
     - name: https
-      port: 443
-      targetPort: 8443
+      port: 80
+      targetPort: 8080
   selector:
     app: keycloak
   type: ClusterIP
@@ -34,10 +34,6 @@ spec:
         - name: keycloak
           image: quay.io/keycloak/keycloak:20.0.2
           args: ["start", "--cache-stack=kubernetes"]
-          volumeMounts:
-            - name: certs
-              mountPath: "/etc/certs"
-              readOnly: true
           env:
             - name: KEYCLOAK_ADMIN
               valueFrom:
@@ -52,16 +48,23 @@ spec:
                   secretKeyRef:
                     { name: keycloak-secret, key: KEYCLOAK_ADMIN_PASSWORD },
                 }
-            - name: KC_HTTPS_CERTIFICATE_FILE
-              value: "/etc/certs/tls.crt"
-            - name: KC_HTTPS_CERTIFICATE_KEY_FILE
-              value: "/etc/certs/tls.key"
             - name: KC_HEALTH_ENABLED
               value: "true"
             - name: KC_METRICS_ENABLED
               value: "true"
-            - name: KC_HOSTNAME
-              value: auth.localtest.me
+
+            - name: KC_HOSTNAME_URL
+              value: "http://192.168.122.22:31617"
+
+            - name: KC_HOSTNAME_ADMIN_URL
+              value: "http://192.168.122.22:31617"
+
+            - name: KC_HTTP_ENABLED
+              value: "true"
+
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+
             - name: KC_PROXY
               value: "edge"
             - name: KC_DB
@@ -88,18 +91,11 @@ spec:
               cpu: "1"
               memory: "2Gi"
           ports:
-            - name: jgroups
-              containerPort: 7600
-            - name: https
-              containerPort: 8443
+            - name: http
+              containerPort: 8080
           readinessProbe:
             httpGet:
-              scheme: HTTPS
               path: /health/ready
-              port: 8443
+              port: 8080
             initialDelaySeconds: 60
             periodSeconds: 1
-      volumes:
-        - name: certs
-          secret:
-            secretName: auth-tls-secret
