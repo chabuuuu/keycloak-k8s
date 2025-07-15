@@ -3,22 +3,17 @@ kind: Ingress
 metadata:
   name: auth-ingress
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "https"
+    # nginx.ingress.kubernetes.io/backend-protocol: "https"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - fake
-      secretName: auth-tls-secret
   rules:
-    - host: "auth.localtest.me"
-      http:
-        paths:
-          - pathType: Prefix
-            path: "/"
-            backend:
-              service:
-                name: keycloak
-                port:
-                  number: 80
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: keycloak
+              port:
+                number: 80
