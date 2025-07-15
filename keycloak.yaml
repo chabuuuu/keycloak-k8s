@@ -53,14 +53,17 @@ spec:
             - name: KC_METRICS_ENABLED
               value: "true"
 
-            - name: KC_HOSTNAME_URL
-              value: "http://192.168.122.22:31617"
+            # - name: KC_HOSTNAME_URL
+            #   value: "http://192.168.122.22:31617"
 
-            - name: KC_HOSTNAME_ADMIN_URL
-              value: "http://192.168.122.22:31617"
+            # - name: KC_HOSTNAME_ADMIN_URL
+            #   value: "http://192.168.122.22:31617"
 
             - name: KC_HTTP_ENABLED
               value: "true"
+
+            - name: KC_PROXY_HEADERS
+              value: "forwarded|xforwarded"
 
             - name: PROXY_ADDRESS_FORWARDING
               value: "true"
