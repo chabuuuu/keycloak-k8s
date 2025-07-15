@@ -8,12 +8,12 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - http:
-      paths:
-        - pathType: Prefix
-          path: "/"
-          backend:
-            service:
-              name: keycloak
-              port:
-                number: 80
+    - http: # Bỏ 'host' để chấp nhận mọi domain hoặc IP
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: keycloak
+                port:
+                  number: 80
