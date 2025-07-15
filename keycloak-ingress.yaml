@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   name: auth-ingress
   annotations:
-    # nginx.ingress.kubernetes.io/backend-protocol: "https"
     nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   ingressClassName: nginx
   rules:
-    - http: # Bỏ 'host' để chấp nhận mọi domain hoặc IP
+    - http:
         paths:
           - pathType: Prefix
-            path: "/"
+            path: "/" # Đảm bảo đường dẫn này khớp với yêu cầu của bạn
             backend:
               service:
                 name: keycloak
