@@ -63,7 +63,7 @@ spec:
               value: "true"
 
             - name: KC_PROXY_HEADERS
-              value: "forwarded, xforwarded"
+              value: "forwarded"
 
             - name: PROXY_ADDRESS_FORWARDING
               value: "true"
